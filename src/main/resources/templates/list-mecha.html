@@ -1,0 +1,68 @@
+<!DOCTYPE HTML>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
+
+  <title>Linux Job Directory</title>
+</head>
+
+<body>
+
+<div class="container">
+
+  <h3>Linux Job Directory</h3>
+  <hr>
+  <a th:href="@{/mecha/addMecha}"
+     class="btn btn-primary btn-sm mb-3">
+    Add Printer
+  </a>
+
+  <table class="table table-bordered table-striped">
+    <thead class="table-dark">
+    <tr>
+      <th>Mecha Name</th>
+      <th>Version Number</th>
+      <th>Linux Source Close</th>
+      <th>Action</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    <tr th:each="tempMecha : ${mechas}">
+
+      <td th:text="${tempMecha.productName}" />
+      <td th:text="${tempMecha.versionNumber}" />
+      <td th:text="${tempMecha.linuxSourceClose}" />
+      <td> <a th:href="@{/mecha/updateMecha(mechaId=${tempMecha.id})}"
+          class="btn btn-info btn-sm">
+           Edit
+      </a>
+        <a th:href="@{/mecha/deleteMecha(mechaId=${tempMecha.id})}"
+        class="btn btn-danger btn-sm"
+        onclick="if (!(confirm('Delete beneran gak nih?'))) return false">
+          Delete
+        </a>
+        <a th:href="@{/mecha/sendEmail(mechaId=$(tempMecha.id)}"
+        class="btn btn-warning btn-sm"
+        onclick="if (!(confirm('Send email beneran gak nih?'))) return false">
+          Send
+        </a>
+
+      </td>
+    </tr>
+    </tbody>
+  </table>
+
+</div>
+
+</body>
+</html>
+
+
+

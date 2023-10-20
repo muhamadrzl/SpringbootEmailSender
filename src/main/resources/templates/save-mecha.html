@@ -1,0 +1,35 @@
+<!DOCTYPE HTML>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
+
+    <title>Linux Job Directory</title>
+</head>
+<body>
+<h3>Please Add the Printer Model!!!</h3>
+<br>
+<form th:action="@{/mecha/saveMecha}" th:object="${mecha}" method="POST">
+    <input type="hidden" th:field="*{id}"/>
+    <input type="text" th:field="*{productName}" placeholder="Input the printer name"
+                    class-="form-control mb-4 w-25"/>
+    <br><br>
+
+    <input type="text" th:field="*{versionNumber}" placeholder="Input the version number"
+                           class-="form-control mb-4 w-25"/>
+    <br><br>
+
+    <input type="datetime-local" th:field="*{linuxSourceClose}" placeholder="Input the date"
+                                class-="form-control mb-4 w-25"/>
+    <br><br>
+    <button type="submit" class="btn btn-info col-2">Save</button>
+</form>
+
+
+</body>
+</html>
