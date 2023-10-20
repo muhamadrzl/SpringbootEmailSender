@@ -44,7 +44,10 @@ public class MechaServiceImpl implements MechaService {
     @Value("${spring.mail.username}")
     private String fromEmail;
     @Override
-    public String sendEmail(String to, String subject, String body, Integer id) {
+    public String sendEmail(String to, String subject, String body) {
+        to = "rizalridlo97@gmail.com";
+        subject="halo";
+        body="selamat pagi";
 
         SimpleMailMessage mailMessage
                 = new SimpleMailMessage();

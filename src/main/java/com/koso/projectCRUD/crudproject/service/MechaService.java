@@ -12,6 +12,6 @@ public interface MechaService {
     List<Mecha> findAll();
     Mecha findById(Integer id);
 
-    String sendEmail(String to, String subject, String body, Integer id);
+    String sendEmail(String to, String subject, String body);
 
 }
