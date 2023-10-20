@@ -48,8 +48,9 @@ public class MechaController {
                 return "redirect:/mecha/listMecha";
         }
         @PostMapping("/sendEmail")
-        public String sendEmail(@RequestParam("mechaId") int theId){
-               mechaService.sendEmail()
+        public String sendEmail(@RequestParam("mechaId") int theId, String to, String subject, String body){
+               String succeeded= mechaService.sendEmail(to, subject, body, theId);
+               return succeeded;
         }
 
 }
