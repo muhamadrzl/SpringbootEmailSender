@@ -17,8 +17,15 @@ public class MechaController {
         }
 
         @GetMapping("/listMecha")
-        public String showMecha(Model theModel){
+        public String showMecha(@RequestParam(value = "search", required = false) String searchQuery,Model theModel){
                 List<Mecha> theMechas = mechaService.findAll();
+
+                if (searchQuery != null && !searchQuery.isEmpty()) {
+                        theMechas = mechaService.findByProductNameContaining(searchQuery);
+                } else {
+                        theMechas = mechaService.findAll();
+                }
+
                 theModel.addAttribute("mechas", theMechas);
                 return "list-mecha";
         }
@@ -47,10 +54,10 @@ public class MechaController {
                 mechaService.deleteById(theId);
                 return "redirect:/mecha/listMecha";
         }
-        @PostMapping("/sendEmail")
-        public String sendEmail(String to, String subject, String body){
-               String succeeded= mechaService.sendEmail(to, subject, body);
-               return succeeded;
+        @GetMapping("/sendEmail")
+        public String sendEmail(@RequestParam("mechaId") int theId, String to, String subject, String body){
+               mechaService.sendEmail(theId, to, subject, body);
+               Mecha mecha = mechaService.findById(theId);
+               return "redirect:/mecha/listMecha";
         }
-
 }

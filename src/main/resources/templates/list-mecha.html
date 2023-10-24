@@ -22,7 +22,10 @@
      class="btn btn-primary btn-sm mb-3">
     Add Printer
   </a>
-
+  <form th:action="@{/mecha/listMecha}" th:object="${mecha}" method="get">
+    <input type="text" name="search" placeholder="Search by Printer Name">
+    <button type="submit">Search</button>
+  </form>
   <table class="table table-bordered table-striped">
     <thead class="table-dark">
     <tr>
@@ -48,7 +51,7 @@
         onclick="if (!(confirm('Delete beneran gak nih?'))) return false">
           Delete
         </a>
-        <a th:href="@{/mecha/sendEmail}"
+        <a th:href="@{/mecha/sendEmail(mechaId=${tempMecha.id})}"
         class="btn btn-warning btn-sm"
         onclick="if (!(confirm('Send email beneran gak nih?'))) return false">
           Send

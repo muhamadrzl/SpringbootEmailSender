@@ -44,10 +44,15 @@ public class MechaServiceImpl implements MechaService {
     @Value("${spring.mail.username}")
     private String fromEmail;
     @Override
-    public String sendEmail(String to, String subject, String body) {
+    public void sendEmail(Integer id, String to, String subject, String body) {
+        Mecha mecha = findById(id);
         to = "rizalridlo97@gmail.com";
         subject="halo";
-        body="selamat pagi";
+        body="Hi, I am Koso from Yudhi Yoga GM.\n" +
+                "Here I'd like to share about " + mecha.getProductName() + " release on " +mecha.getVersionNumber()+
+                " at " + mecha.getLinuxSourceClose()+ "\n"+
+                "Please cooperate! Thanks!"
+        ;
 
         SimpleMailMessage mailMessage
                 = new SimpleMailMessage();
@@ -60,7 +65,12 @@ public class MechaServiceImpl implements MechaService {
 
         // Sending the mail
         javaMailSender.send(mailMessage);
-        return "Mail Sent Successfully...";
+//        return "Mail Sent Successfully...";
+    }
+
+    @Override
+    public List<Mecha> findByProductNameContaining(String searchQuery) {
+        return mechaRepository.findByProductNameContaining(searchQuery);
     }
 
 }
