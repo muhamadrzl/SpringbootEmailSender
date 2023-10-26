@@ -15,7 +15,7 @@ public interface MechaService {
 
     void sendEmail(Integer id, String to, String subject, String body);
 
-    Page<Mecha> findPaginated(int pageNo, int pageSize);
-    Page<Mecha> findByProductNameContaining(String productName, int pageNo, int pageSize);
+    Page<Mecha> findPaginated(int pageNo, int pageSize,String sortField, String sortDir);
+    Page<Mecha> findByProductNameContaining(String productName, int pageNo, int pageSize,String sortField, String sortDir);
 }
 

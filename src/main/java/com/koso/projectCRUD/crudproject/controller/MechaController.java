@@ -17,38 +17,24 @@ public class MechaController {
                 mechaService = themechaService;
         }
 
-//        @GetMapping("/listMecha")
-//        public String showMecha(@RequestParam(value = "search", required = false) String searchQuery,
-//                                @RequestParam(value = "pageNo", defaultValue = "0") int pageNo,
-//                                @RequestParam(value = "pageSize", defaultValue = "10") int pageSize,
-//                                Model theModel){
-//                Page<Mecha> theMechas = mechaService.findPaginated(pageNo, pageSize);
-//
-//                List<Mecha> theMechas = mechaService.findAll();
-//
-//                if (searchQuery != null && !searchQuery.isEmpty()) {
-//                        theMechas = mechaService.findByProductNameContaining(searchQuery);
-//                } else {
-//                        theMechas = mechaService.findAll();
-//                }
-//
-//                theModel.addAttribute("mechas", theMechas);
-//                return "list-mecha";
-//        }
         @GetMapping("/listMecha")
         public String showMecha(@RequestParam(value = "search", required = false) String searchQuery,
                         @RequestParam(value = "pageNo", defaultValue = "0") int pageNo,
                         @RequestParam(value = "pageSize", defaultValue = "5") int pageSize,
+                                @RequestParam(value = "sortField", defaultValue = "linuxSourceClose") String sortField,
+                                @RequestParam(value = "sortDir", defaultValue = "asc") String sortDir,
                         Model theModel){
         Page<Mecha> theMechas;
 
         if (searchQuery != null && !searchQuery.isEmpty()) {
-                theMechas = mechaService.findByProductNameContaining(searchQuery, pageNo, pageSize);
+                theMechas = mechaService.findByProductNameContaining(searchQuery, pageNo, pageSize,sortField, sortDir);
         } else {
-                theMechas = mechaService.findPaginated(pageNo, pageSize);
+                theMechas = mechaService.findPaginated(pageNo, pageSize,sortField, sortDir);
         }
 
         theModel.addAttribute("mechas", theMechas);
+        theModel.addAttribute("sortField", sortField);
+        theModel.addAttribute("sortDir", sortDir);
         return "list-mecha";
 }
 

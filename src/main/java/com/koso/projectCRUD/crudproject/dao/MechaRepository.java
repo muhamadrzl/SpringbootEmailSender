@@ -12,6 +12,13 @@ public interface MechaRepository extends JpaRepository<Mecha,Integer> {
 
     Page<Mecha> findByProductNameContaining(String productName, Pageable pageable);
 
-    Page<Mecha> findAll(Pageable pageable);
+    @Query("SELECT m FROM Mecha m ORDER BY " +
+            "CASE WHEN :sortDir = 'asc' THEN " +
+            "CASE WHEN :sortField = 'linuxSourceClose' THEN m.linuxSourceClose END " +
+            "END ASC, " +
+            "CASE WHEN :sortDir = 'desc' THEN " +
+            "CASE WHEN :sortField = 'linuxSourceClose' THEN m.linuxSourceClose END " +
+            "END DESC")
+    Page<Mecha> findAllOrderByField(String sortField, String sortDir, Pageable pageable);
 }
 
