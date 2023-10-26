@@ -18,13 +18,12 @@
 
   <h3>Linux Job Directory</h3>
   <hr>
-  <a th:href="@{/mecha/addMecha}"
-     class="btn btn-primary btn-sm mb-3">
+  <a th:href="@{/mecha/addMecha}" class="btn btn-primary btn-sm mb-3">
     Add Printer
   </a>
-  <form th:action="@{/mecha/listMecha}" th:object="${mecha}" method="get">
+  <form th:action="@{/mecha/listMecha}" method="get">
     <input type="text" name="search" placeholder="Search by Printer Name">
-    <button type="submit">Search</button>
+    <button type="submit" class="btn btn-primary">Search</button>
   </form>
   <table class="table table-bordered table-striped">
     <thead class="table-dark">
@@ -42,30 +41,42 @@
       <td th:text="${tempMecha.productName}" />
       <td th:text="${tempMecha.versionNumber}" />
       <td th:text="${tempMecha.linuxSourceClose}" />
-      <td> <a th:href="@{/mecha/updateMecha(mechaId=${tempMecha.id})}"
-          class="btn btn-info btn-sm">
-           Edit
-      </a>
-        <a th:href="@{/mecha/deleteMecha(mechaId=${tempMecha.id})}"
-        class="btn btn-danger btn-sm"
-        onclick="if (!(confirm('Delete beneran gak nih?'))) return false">
+      <td>
+        <a th:href="@{/mecha/updateMecha(mechaId=${tempMecha.id})}" class="btn btn-info btn-sm">
+          Edit
+        </a>
+        <a th:href="@{/mecha/deleteMecha(mechaId=${tempMecha.id})}" class="btn btn-danger btn-sm"
+           onclick="return confirm('Delete beneran gak nih?');">
           Delete
         </a>
-        <a th:href="@{/mecha/sendEmail(mechaId=${tempMecha.id})}"
-        class="btn btn-warning btn-sm"
-        onclick="if (!(confirm('Send email beneran gak nih?'))) return false">
+        <a th:href="@{/mecha/sendEmail(mechaId=${tempMecha.id})}" class="btn btn-warning btn-sm"
+           onclick="return confirm('Send email beneran gak nih?');">
           Send
         </a>
-
       </td>
     </tr>
     </tbody>
   </table>
 
+  <!-- Pagination Links -->
+  <div th:if="${mechas.totalPages > 1}">
+    <ul class="pagination">
+      <li th:class="${mechas.first ? 'disabled' : ''}"
+          class="page-item"><a class="page-link"
+                               th:href="@{/mecha/listMecha(pageNo=0, pageSize=${mechas.size})}">First</a></li>
+      <li th:class="${mechas.first ? 'disabled' : ''}"
+          class="page-item"><a class="page-link"
+                               th:href="@{/mecha/listMecha(pageNo=${mechas.number - 1}, pageSize=${mechas.size})}">Previous</a></li>
+      <li th:class="${mechas.last ? 'disabled' : ''}"
+          class="page-item"><a class="page-link"
+                               th:href="@{/mecha/listMecha(pageNo=${mechas.number + 1}, pageSize=${mechas.size})}">Next</a></li>
+      <li th:class="${mechas.last ? 'disabled' : ''}"
+          class="page-item"><a class="page-link"
+                               th:href="@{/mecha/listMecha(pageNo=${mechas.totalPages - 1}, pageSize=${mechas.size})}">Last</a></li>
+    </ul>
+  </div>
+
 </div>
 
 </body>
 </html>
-
-
-
