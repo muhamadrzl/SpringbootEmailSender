@@ -2,6 +2,7 @@ package com.koso.projectCRUD.crudproject.controller;
 
 import com.koso.projectCRUD.crudproject.entity.Mecha;
 import com.koso.projectCRUD.crudproject.service.MechaService;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -17,18 +18,24 @@ public class MechaController {
         }
 
         @GetMapping("/listMecha")
-        public String showMecha(@RequestParam(value = "search", required = false) String searchQuery,Model theModel){
-                List<Mecha> theMechas = mechaService.findAll();
+        public String showMecha(@RequestParam(value = "search", required = false) String searchQuery,
+                        @RequestParam(value = "pageNo", defaultValue = "0") int pageNo,
+                        @RequestParam(value = "pageSize", defaultValue = "5") int pageSize,
+                        @RequestParam(value = "sortDir", defaultValue= "asc") String sortDir,
+                        @RequestParam(value="sortField", defaultValue = "productName") String sortField,
+                        Model theModel){
+        Page<Mecha> theMechas;
 
-                if (searchQuery != null && !searchQuery.isEmpty()) {
-                        theMechas = mechaService.findByProductNameContaining(searchQuery);
-                } else {
-                        theMechas = mechaService.findAll();
-                }
-
-                theModel.addAttribute("mechas", theMechas);
-                return "list-mecha";
+        if (searchQuery != null && !searchQuery.isEmpty()) {
+                theMechas = mechaService.findByProductNameContaining(searchQuery, pageNo, pageSize);
+        } else {
+                theMechas = mechaService.findPaginated(pageNo, pageSize, sortField,sortDir);
         }
+
+        theModel.addAttribute("mechas", theMechas);
+        theModel.addAttribute("reverseSortDir", sortDir.equals("asc") ? "desc" : "asc");
+        return "list-mecha";
+}
 
         @GetMapping("/addMecha")
         public String addMecha(Model theModel){
@@ -49,6 +56,7 @@ public class MechaController {
                 theModel.addAttribute("mecha", mecha);
                 return "save-mecha";
         }
+
         @GetMapping("/deleteMecha")
         public String deleteMecha(@RequestParam("mechaId") int theId){
                 mechaService.deleteById(theId);

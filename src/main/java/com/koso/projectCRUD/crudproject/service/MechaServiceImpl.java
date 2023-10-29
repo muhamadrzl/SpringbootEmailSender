@@ -4,6 +4,10 @@ import com.koso.projectCRUD.crudproject.dao.MechaRepository;
 import com.koso.projectCRUD.crudproject.entity.Mecha;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
@@ -51,8 +55,7 @@ public class MechaServiceImpl implements MechaService {
         body="Hi, I am Koso from Yudhi Yoga GM.\n" +
                 "Here I'd like to share about " + mecha.getProductName() + " release on " +mecha.getVersionNumber()+
                 " at " + mecha.getLinuxSourceClose()+ "\n"+
-                "Please cooperate! Thanks!"
-        ;
+                "Please cooperate! Thanks!";
 
         SimpleMailMessage mailMessage
                 = new SimpleMailMessage();
@@ -69,8 +72,17 @@ public class MechaServiceImpl implements MechaService {
     }
 
     @Override
-    public List<Mecha> findByProductNameContaining(String searchQuery) {
-        return mechaRepository.findByProductNameContaining(searchQuery);
+    public Page<Mecha> findPaginated(int pageNo, int pageSize, String sortField, String sortDir) {
+        Sort sort = sortDir.equalsIgnoreCase(Sort.Direction.ASC.name()) ? Sort.by(sortField).ascending():
+                Sort.by(sortField).descending();
+        Pageable pageable = PageRequest.of(pageNo, pageSize,sort);
+        return mechaRepository.findAll(pageable);
     }
 
+    @Override
+    public Page<Mecha> findByProductNameContaining(String productName, int pageNo, int pageSize) {
+
+        Pageable pageable = PageRequest.of(pageNo, pageSize);
+        return mechaRepository.findByProductNameContaining(productName, pageable);
+    }
 }
