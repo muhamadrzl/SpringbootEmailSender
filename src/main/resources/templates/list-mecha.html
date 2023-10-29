@@ -28,9 +28,15 @@
   <table class="table table-bordered table-striped">
     <thead class="table-dark">
     <tr>
-      <th>Mecha Name</th>
+      <th>
+        <a th:href="@{'/mecha/listMecha'+ '?sortField=productName&sortDir=' + ${reverseSortDir}}">
+          Mecha Name</a>
+      </th>
       <th>Version Number</th>
-      <th>Linux Source Close</th>
+      <th>
+        <a th:href="@{'/mecha/listMecha'+ '?sortField=linuxSourceClose&sortDir=' + ${reverseSortDir}}">
+          Linux Source Close</a>
+      </th>
       <th>Action</th>
     </tr>
     </thead>

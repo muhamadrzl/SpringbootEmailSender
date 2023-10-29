@@ -21,20 +21,19 @@ public class MechaController {
         public String showMecha(@RequestParam(value = "search", required = false) String searchQuery,
                         @RequestParam(value = "pageNo", defaultValue = "0") int pageNo,
                         @RequestParam(value = "pageSize", defaultValue = "5") int pageSize,
-                                @RequestParam(value = "sortField", defaultValue = "linuxSourceClose") String sortField,
-                                @RequestParam(value = "sortDir", defaultValue = "asc") String sortDir,
+                        @RequestParam(value = "sortDir", defaultValue= "asc") String sortDir,
+                        @RequestParam(value="sortField", defaultValue = "productName") String sortField,
                         Model theModel){
         Page<Mecha> theMechas;
 
         if (searchQuery != null && !searchQuery.isEmpty()) {
-                theMechas = mechaService.findByProductNameContaining(searchQuery, pageNo, pageSize,sortField, sortDir);
+                theMechas = mechaService.findByProductNameContaining(searchQuery, pageNo, pageSize);
         } else {
-                theMechas = mechaService.findPaginated(pageNo, pageSize,sortField, sortDir);
+                theMechas = mechaService.findPaginated(pageNo, pageSize, sortField,sortDir);
         }
 
         theModel.addAttribute("mechas", theMechas);
-        theModel.addAttribute("sortField", sortField);
-        theModel.addAttribute("sortDir", sortDir);
+        theModel.addAttribute("reverseSortDir", sortDir.equals("asc") ? "desc" : "asc");
         return "list-mecha";
 }
 

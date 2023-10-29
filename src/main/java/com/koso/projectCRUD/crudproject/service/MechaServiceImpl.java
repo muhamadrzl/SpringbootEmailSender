@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
@@ -71,13 +72,16 @@ public class MechaServiceImpl implements MechaService {
     }
 
     @Override
-    public Page<Mecha> findPaginated(int pageNo, int pageSize) {
-        Pageable pageable = PageRequest.of(pageNo, pageSize);
+    public Page<Mecha> findPaginated(int pageNo, int pageSize, String sortField, String sortDir) {
+        Sort sort = sortDir.equalsIgnoreCase(Sort.Direction.ASC.name()) ? Sort.by(sortField).ascending():
+                Sort.by(sortField).descending();
+        Pageable pageable = PageRequest.of(pageNo, pageSize,sort);
         return mechaRepository.findAll(pageable);
     }
 
     @Override
     public Page<Mecha> findByProductNameContaining(String productName, int pageNo, int pageSize) {
+
         Pageable pageable = PageRequest.of(pageNo, pageSize);
         return mechaRepository.findByProductNameContaining(productName, pageable);
     }
