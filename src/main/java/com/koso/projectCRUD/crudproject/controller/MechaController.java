@@ -21,8 +21,8 @@ public class MechaController {
         public String showMecha(@RequestParam(value = "search", required = false) String searchQuery,
                         @RequestParam(value = "pageNo", defaultValue = "0") int pageNo,
                         @RequestParam(value = "pageSize", defaultValue = "5") int pageSize,
-                        @RequestParam(value = "sortDir", defaultValue= "asc") String sortDir,
-                        @RequestParam(value="sortField", defaultValue = "productName") String sortField,
+                        @RequestParam(value = "sortDir", defaultValue= "desc") String sortDir,
+                        @RequestParam(value="sortField", defaultValue = "linuxSourceClose") String sortField,
                         Model theModel){
         Page<Mecha> theMechas;
 
@@ -33,6 +33,8 @@ public class MechaController {
         }
 
         theModel.addAttribute("mechas", theMechas);
+        theModel.addAttribute("sortField",sortField);
+        theModel.addAttribute("sortDir",sortDir);
         theModel.addAttribute("reverseSortDir", sortDir.equals("asc") ? "desc" : "asc");
         return "list-mecha";
 }
