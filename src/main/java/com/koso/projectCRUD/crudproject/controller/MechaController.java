@@ -33,6 +33,8 @@ public class MechaController {
         }
 
         theModel.addAttribute("mechas", theMechas);
+        theModel.addAttribute("sortField",sortField);
+        theModel.addAttribute("sortDir",sortDir);
         theModel.addAttribute("reverseSortDir", sortDir.equals("asc") ? "desc" : "asc");
         return "list-mecha";
 }

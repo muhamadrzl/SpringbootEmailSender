@@ -69,16 +69,16 @@
     <ul class="pagination">
       <li th:class="${mechas.first ? 'disabled' : ''}"
           class="page-item"><a class="page-link"
-                               th:href="@{/mecha/listMecha(pageNo=0, pageSize=${mechas.size})}">First</a></li>
+                               th:href="@{/mecha/listMecha(pageNo=0, pageSize=${mechas.size},sortField=${sortField}, sortDir=${sortDir})}">First</a></li>
       <li th:class="${mechas.first ? 'disabled' : ''}"
           class="page-item"><a class="page-link"
-                               th:href="@{/mecha/listMecha(pageNo=${mechas.number - 1}, pageSize=${mechas.size})}">Previous</a></li>
+                               th:href="@{/mecha/listMecha(pageNo=${mechas.number - 1}, pageSize=${mechas.size},sortField=${sortField}, sortDir=${sortDir})}">Previous</a></li>
       <li th:class="${mechas.last ? 'disabled' : ''}"
           class="page-item"><a class="page-link"
-                               th:href="@{/mecha/listMecha(pageNo=${mechas.number + 1}, pageSize=${mechas.size})}">Next</a></li>
+                               th:href="@{/mecha/listMecha(pageNo=${mechas.number + 1}, pageSize=${mechas.size},sortField=${sortField}, sortDir=${sortDir})}">Next</a></li>
       <li th:class="${mechas.last ? 'disabled' : ''}"
           class="page-item"><a class="page-link"
-                               th:href="@{/mecha/listMecha(pageNo=${mechas.totalPages - 1}, pageSize=${mechas.size})}">Last</a></li>
+                               th:href="@{/mecha/listMecha(pageNo=${mechas.totalPages - 1}, pageSize=${mechas.size},sortField=${sortField}, sortDir=${sortDir})}">Last</a></li>
     </ul>
   </div>
 
