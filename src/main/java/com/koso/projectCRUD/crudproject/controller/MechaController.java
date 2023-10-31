@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+
 @Controller
 @RequestMapping("/mecha")
 public class MechaController {
@@ -25,7 +26,14 @@ public class MechaController {
                         @RequestParam(value="sortField", defaultValue = "linuxSourceClose") String sortField,
                         Model theModel){
         Page<Mecha> theMechas;
-
+        Boolean emailSent = false;
+        Boolean bool;
+        List <Mecha> mechaList = mechaService.findAll();
+        if(!emailSent) {
+                for (Mecha mecha : mechaList) {
+                        emailSent = mechaService.autoSendEmail(mecha.getId());
+                }
+        }
         if (searchQuery != null && !searchQuery.isEmpty()) {
                 theMechas = mechaService.findByProductNameContaining(searchQuery, pageNo, pageSize);
         } else {
@@ -65,8 +73,10 @@ public class MechaController {
                 return "redirect:/mecha/listMecha";
         }
         @GetMapping("/sendEmail")
-        public String sendEmail(@RequestParam("mechaId") int theId, String to, String subject, String body){
-               mechaService.sendEmail(theId, to, subject, body);
+        public String sendEmail(@RequestParam("mechaId") int theId, String body){
+                String to = "rizalridlo97@gmail.com";
+                String subject = "halo";
+               mechaService.sendEmail(theId, to, subject);
                Mecha mecha = mechaService.findById(theId);
                return "redirect:/mecha/listMecha";
         }

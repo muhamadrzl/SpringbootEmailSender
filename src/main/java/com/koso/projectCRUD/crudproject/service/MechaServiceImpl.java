@@ -12,6 +12,9 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -48,10 +51,9 @@ public class MechaServiceImpl implements MechaService {
     @Value("${spring.mail.username}")
     private String fromEmail;
     @Override
-    public void sendEmail(Integer id, String to, String subject, String body) {
+    public void sendEmail(Integer id, String to, String subject) {
         Mecha mecha = findById(id);
-        to = "rizalridlo97@gmail.com";
-        subject="halo";
+        String body;
         body="Hi, I am Koso from Yudhi Yoga GM.\n" +
                 "Here I'd like to share about " + mecha.getProductName() + " release on " +mecha.getVersionNumber()+
                 " at " + mecha.getLinuxSourceClose()+ "\n"+
@@ -84,5 +86,17 @@ public class MechaServiceImpl implements MechaService {
 
         Pageable pageable = PageRequest.of(pageNo, pageSize);
         return mechaRepository.findByProductNameContaining(productName, pageable);
+    }
+
+    @Override
+    public Boolean autoSendEmail(Integer id) {
+        Mecha mecha = findById(id);
+        LocalDateTime currentDate = LocalDateTime.now();
+        if (currentDate.isAfter(mecha.getLinuxSourceClose())){
+            String to = "rizalridlo97@gmail.com";
+            String subject = "URGENT MATTER!!!!";
+            sendEmail(id, to, subject);
+        }
+        return true;
     }
 }

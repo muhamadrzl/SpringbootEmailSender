@@ -13,9 +13,11 @@ public interface MechaService {
     List<Mecha> findAll();
     Mecha findById(Integer id);
 
-    void sendEmail(Integer id, String to, String subject, String body);
+    void sendEmail(Integer id, String to, String subject);
 
     Page<Mecha> findPaginated(int pageNo, int pageSize, String sortField, String sortDir);
     Page<Mecha> findByProductNameContaining(String productName, int pageNo, int pageSize);
+
+    Boolean autoSendEmail(Integer id);
 }
 
