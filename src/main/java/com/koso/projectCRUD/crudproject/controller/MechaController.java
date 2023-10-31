@@ -9,6 +9,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -16,42 +17,36 @@ import java.util.List;
 @RequestMapping("/mecha")
 public class MechaController {
         Boolean emailSent = false;
-        LocalDateTime y = LocalDateTime.now();
         private MechaService mechaService;
         public MechaController(MechaService themechaService) {
                 mechaService = themechaService;
         }
-        @Scheduled(fixedRate = 500000)
+
         @GetMapping("/listMecha")
         public String showMecha(@RequestParam(value = "search", required = false) String searchQuery,
-                        @RequestParam(value = "pageNo", defaultValue = "0") int pageNo,
-                        @RequestParam(value = "pageSize", defaultValue = "5") int pageSize,
-                        @RequestParam(value = "sortDir", defaultValue= "desc") String sortDir,
-                        @RequestParam(value="sortField", defaultValue = "linuxSourceClose") String sortField,
-                        Model theModel){
-        Page<Mecha> theMechas;
-        List <Mecha> mechaList = mechaService.findAll();
-        if(!emailSent) {
-                for (Mecha mecha : mechaList) {
-                        emailSent = mechaService.autoSendEmail(mecha.getId());
+                                @RequestParam(value = "pageNo", defaultValue = "0") int pageNo,
+                                @RequestParam(value = "pageSize", defaultValue = "5") int pageSize,
+                                @RequestParam(value = "sortDir", defaultValue= "desc") String sortDir,
+                                @RequestParam(value="sortField", defaultValue = "linuxSourceClose") String sortField,
+                                Model theModel){
+                Page<Mecha> theMechas;
+                List <Mecha> mechaList = mechaService.findAll();
+                if(!emailSent) {
+                        for (Mecha mecha : mechaList) {
+                                emailSent = mechaService.autoSendEmail(mecha.getId());
+                        }
                 }
-        }
-        if (y.isBefore(LocalDateTime.now())){
-                emailSent = false;
+                if (searchQuery != null && !searchQuery.isEmpty()) {
+                        theMechas = mechaService.findByProductNameContaining(searchQuery, pageNo, pageSize);
+                } else {
+                        theMechas = mechaService.findPaginated(pageNo, pageSize, sortField,sortDir);
                 }
-        if (searchQuery != null && !searchQuery.isEmpty()) {
-                theMechas = mechaService.findByProductNameContaining(searchQuery, pageNo, pageSize);
-        } else {
-                theMechas = mechaService.findPaginated(pageNo, pageSize, sortField,sortDir);
+                theModel.addAttribute("mechas", theMechas);
+                theModel.addAttribute("sortField",sortField);
+                theModel.addAttribute("sortDir",sortDir);
+                theModel.addAttribute("reverseSortDir", sortDir.equals("asc") ? "desc" : "asc");
+                return "list-mecha";
         }
-
-        theModel.addAttribute("mechas", theMechas);
-        theModel.addAttribute("sortField",sortField);
-        theModel.addAttribute("sortDir",sortDir);
-        theModel.addAttribute("reverseSortDir", sortDir.equals("asc") ? "desc" : "asc");
-        return "list-mecha";
-}
-
         @GetMapping("/addMecha")
         public String addMecha(Model theModel){
                 Mecha theMecha = new Mecha();
@@ -61,8 +56,8 @@ public class MechaController {
 
         @PostMapping("/saveMecha")
         public String saveMecha(@ModelAttribute("mecha") Mecha theMecha){
-              mechaService.save(theMecha);
-              return "redirect:/mecha/listMecha";
+                mechaService.save(theMecha);
+                return "redirect:/mecha/listMecha";
         }
 
         @GetMapping("/updateMecha")
@@ -79,10 +74,10 @@ public class MechaController {
         }
         @GetMapping("/sendEmail")
         public String sendEmail(@RequestParam("mechaId") int theId, String body){
-                String to = "rizalridlo97@gmail.com";
+                String[] to = {"rizalridlo97@gmail.com"};
                 String subject = "halo";
-               mechaService.sendEmail(theId, to, subject);
-               Mecha mecha = mechaService.findById(theId);
-               return "redirect:/mecha/listMecha";
+                mechaService.sendEmail(theId, to, subject);
+                Mecha mecha = mechaService.findById(theId);
+                return "redirect:/mecha/listMecha";
         }
 }
