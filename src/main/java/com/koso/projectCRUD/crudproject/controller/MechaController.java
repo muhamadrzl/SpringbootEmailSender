@@ -3,21 +3,25 @@ package com.koso.projectCRUD.crudproject.controller;
 import com.koso.projectCRUD.crudproject.entity.Mecha;
 import com.koso.projectCRUD.crudproject.service.MechaService;
 import org.springframework.data.domain.Page;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 
 @Controller
 @RequestMapping("/mecha")
 public class MechaController {
+        Boolean emailSent = false;
+        LocalDateTime y = LocalDateTime.now();
         private MechaService mechaService;
         public MechaController(MechaService themechaService) {
                 mechaService = themechaService;
         }
-
+        @Scheduled(fixedRate = 500000)
         @GetMapping("/listMecha")
         public String showMecha(@RequestParam(value = "search", required = false) String searchQuery,
                         @RequestParam(value = "pageNo", defaultValue = "0") int pageNo,
@@ -26,14 +30,15 @@ public class MechaController {
                         @RequestParam(value="sortField", defaultValue = "linuxSourceClose") String sortField,
                         Model theModel){
         Page<Mecha> theMechas;
-        Boolean emailSent = false;
-        Boolean bool;
         List <Mecha> mechaList = mechaService.findAll();
         if(!emailSent) {
                 for (Mecha mecha : mechaList) {
                         emailSent = mechaService.autoSendEmail(mecha.getId());
                 }
         }
+        if (y.isBefore(LocalDateTime.now())){
+                emailSent = false;
+                }
         if (searchQuery != null && !searchQuery.isEmpty()) {
                 theMechas = mechaService.findByProductNameContaining(searchQuery, pageNo, pageSize);
         } else {
