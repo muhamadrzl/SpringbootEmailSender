@@ -16,10 +16,19 @@ import java.util.List;
 @Controller
 @RequestMapping("/mecha")
 public class MechaController {
-        Boolean emailSent = false;
+
         private MechaService mechaService;
+
         public MechaController(MechaService themechaService) {
                 mechaService = themechaService;
+        }
+
+        @Scheduled(fixedRate = 60000) // Executes every 60 seconds
+        public void performScheduledTask() {
+                List <Mecha> mechaList = mechaService.findAll();
+                for (Mecha mecha : mechaList) {
+                       mechaService.autoSendEmail(mecha.getId());
+                }
         }
 
         @GetMapping("/listMecha")
@@ -30,12 +39,7 @@ public class MechaController {
                                 @RequestParam(value="sortField", defaultValue = "linuxSourceClose") String sortField,
                                 Model theModel){
                 Page<Mecha> theMechas;
-                List <Mecha> mechaList = mechaService.findAll();
-                if(!emailSent) {
-                        for (Mecha mecha : mechaList) {
-                                emailSent = mechaService.autoSendEmail(mecha.getId());
-                        }
-                }
+
                 if (searchQuery != null && !searchQuery.isEmpty()) {
                         theMechas = mechaService.findByProductNameContaining(searchQuery, pageNo, pageSize);
                 } else {

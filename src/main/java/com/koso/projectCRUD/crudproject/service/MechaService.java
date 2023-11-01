@@ -18,6 +18,6 @@ public interface MechaService {
     Page<Mecha> findPaginated(int pageNo, int pageSize, String sortField, String sortDir);
     Page<Mecha> findByProductNameContaining(String productName, int pageNo, int pageSize);
 
-    Boolean autoSendEmail(Integer id);
+    void autoSendEmail(Integer id);
 }
 

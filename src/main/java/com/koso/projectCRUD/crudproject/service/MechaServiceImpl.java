@@ -27,7 +27,8 @@ public class MechaServiceImpl implements MechaService {
 
     public MechaServiceImpl(MechaRepository theMechaRepository) {
         mechaRepository = theMechaRepository;
-           }
+    }
+
     @Override
     public void deleteById(Integer id) {
         mechaRepository.deleteById(id);
@@ -51,13 +52,14 @@ public class MechaServiceImpl implements MechaService {
 
     @Value("${spring.mail.username}")
     private String fromEmail;
+
     @Override
     public void sendEmail(Integer id, String[] to, String subject) {
         Mecha mecha = findById(id);
         String body;
-        body="Hi, I am Koso from Yudhi Yoga GM.\n" +
-                "Here I'd like to share about " + mecha.getProductName() + " release on " +mecha.getVersionNumber()+
-                " at " + mecha.getLinuxSourceClose()+ "\n"+
+        body = "Hi, I am Koso from Yudhi Yoga GM.\n" +
+                "Here I'd like to share about " + mecha.getProductName() + " release on " + mecha.getVersionNumber() +
+                " at " + mecha.getLinuxSourceClose() + "\n" +
                 "Please cooperate! Thanks!";
 
         SimpleMailMessage mailMessage
@@ -76,9 +78,9 @@ public class MechaServiceImpl implements MechaService {
 
     @Override
     public Page<Mecha> findPaginated(int pageNo, int pageSize, String sortField, String sortDir) {
-        Sort sort = sortDir.equalsIgnoreCase(Sort.Direction.ASC.name()) ? Sort.by(sortField).ascending():
+        Sort sort = sortDir.equalsIgnoreCase(Sort.Direction.ASC.name()) ? Sort.by(sortField).ascending() :
                 Sort.by(sortField).descending();
-        Pageable pageable = PageRequest.of(pageNo, pageSize,sort);
+        Pageable pageable = PageRequest.of(pageNo, pageSize, sort);
         return mechaRepository.findAll(pageable);
     }
 
@@ -90,18 +92,14 @@ public class MechaServiceImpl implements MechaService {
     }
 
     @Override
-    public Boolean autoSendEmail(Integer id) {
+    public void autoSendEmail(Integer id) {
         Mecha mecha = findById(id);
         LocalDateTime currentDate = LocalDateTime.now();
-        if (currentDate.isBefore(mecha.getLinuxSourceClose())){
+        if (currentDate.isBefore(mecha.getLinuxSourceClose())) {
             String[] to = {"rizalridlo97@gmail.com"};
             String subject = "URGENT MATTER!!!!";
             sendEmail(id, to, subject);
-            return true;
         }
-        else{
-            return false;
-        }
-
     }
 }
+
